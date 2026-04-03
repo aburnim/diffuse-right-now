@@ -412,44 +412,26 @@ export const seedData: AppState = {
     {
       id: "nozomi-ando",
       name: "Nozomi Ando",
-      affiliation: "Cornell University",
+      affiliation: "Cornell",
       role: "Professor, Chemistry & Chemical Biology",
-    },
-    {
-      id: "prachee-avasthi",
-      name: "Prachee Avasthi",
-      affiliation: "Astera Institute",
-      role: "Head of Open Science",
     },
     {
       id: "justin-biel",
       name: "Justin Biel",
-      affiliation: "Astera Institute",
+      affiliation: "DiffUSE",
       role: "Software Engineer",
     },
     {
       id: "andy-burnim",
       name: "Andy Burnim",
-      affiliation: "Astera Institute",
+      affiliation: "DiffUSE",
       role: "Project Manager",
-    },
-    {
-      id: "seemay-chou",
-      name: "Seemay Chou",
-      affiliation: "Astera Institute",
-      role: "Interim Director",
     },
     {
       id: "james-fraser",
       name: "James Fraser",
       affiliation: "UCSF",
       role: "Professor, Bioengineering",
-    },
-    {
-      id: "nitin-gupta",
-      name: "Nitin Gupta",
-      affiliation: "Astera Institute",
-      role: "Head of Product",
     },
     {
       id: "james-holton",
@@ -460,14 +442,8 @@ export const seedData: AppState = {
     {
       id: "steve-meisburger",
       name: "Steve Meisburger",
-      affiliation: "CHESS, Cornell",
+      affiliation: "Cornell",
       role: "Staff Scientist",
-    },
-    {
-      id: "jessica-polka",
-      name: "Jessica Polka",
-      affiliation: "Astera Institute",
-      role: "Director of Open Science",
     },
     {
       id: "michael-wall",
@@ -478,19 +454,25 @@ export const seedData: AppState = {
     {
       id: "stephanie-wankowicz",
       name: "Stephanie Wankowicz",
-      affiliation: "Vanderbilt University",
-      role: "Assistant Professor, Molecular Physiology & Biophysics",
+      affiliation: "DiffUSE",
+      role: "Lead",
     },
     {
       id: "abbas",
       name: "Abbas",
-      affiliation: "Astera Institute",
+      affiliation: "Ptown",
       role: "Infrastructure Engineer",
     },
     {
       id: "moody",
       name: "Moody",
-      affiliation: "Astera Institute",
+      affiliation: "Ptown",
+      role: "Infrastructure Engineer",
+    },
+    {
+      id: "michael-ptown",
+      name: "Michael",
+      affiliation: "Ptown",
       role: "Infrastructure Engineer",
     },
     {
@@ -506,11 +488,30 @@ export const seedData: AppState = {
       role: "Data Engineer",
     },
     {
-      id: "zielinski",
-      name: "Zielinski",
+      id: "kara-zielinski",
+      name: "Kara Zielinski",
       affiliation: "DiffUSE",
-      role: "Team Member",
+      role: "Researcher",
     },
+    {
+      id: "karson-chrispens",
+      name: "Karson Chrispens",
+      affiliation: "DiffUSE",
+      role: "Researcher",
+    },
+    {
+      id: "marcus-collins",
+      name: "Marcus Collins",
+      affiliation: "DiffUSE",
+      role: "Senior ML Researcher",
+    },
+    {
+      id: "Vratin-Srivastava",
+      name: "Vratin Srivastava",
+      affiliation: "DiffUSE",
+      role: "Researcher",
+    },
+
   ],
 
   events: [
