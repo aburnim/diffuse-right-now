@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Card, Workstream } from "@/lib/types";
+import { Card, Workstream, TeamMember } from "@/lib/types";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import {
@@ -18,6 +18,7 @@ interface CardItemProps {
   card: Card;
   workstream: Workstream;
   editMode: boolean;
+  teamMembers?: TeamMember[];
   onUpdate: (
     cardId: string,
     updates: Partial<Pick<Card, "title" | "description" | "assignees" | "checkInDate">>
@@ -80,6 +81,7 @@ export default function CardItem({
   card,
   workstream,
   editMode,
+  teamMembers = [],
   onUpdate,
   onDelete,
   isDragOverlay,
@@ -88,6 +90,8 @@ export default function CardItem({
   const [editTitle, setEditTitle] = useState(card.title);
   const [editDesc, setEditDesc] = useState(card.description);
   const [editCheckIn, setEditCheckIn] = useState(card.checkInDate || "");
+  const [editAssignees, setEditAssignees] = useState<string[]>(card.assignees);
+  const [assigneeDropdownOpen, setAssigneeDropdownOpen] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
   const {
@@ -125,8 +129,9 @@ export default function CardItem({
     onUpdate(card.id, {
       title: editTitle,
       description: editDesc,
+      assignees: editAssignees,
       checkInDate: editCheckIn || undefined,
-    } as Partial<Pick<Card, "title" | "description" | "assignees" | "checkInDate">>);
+    });
     setIsEditing(false);
   };
 
@@ -134,7 +139,15 @@ export default function CardItem({
     setEditTitle(card.title);
     setEditDesc(card.description);
     setEditCheckIn(card.checkInDate || "");
+    setEditAssignees(card.assignees);
+    setAssigneeDropdownOpen(false);
     setIsEditing(false);
+  };
+
+  const toggleAssignee = (name: string) => {
+    setEditAssignees((prev) =>
+      prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]
+    );
   };
 
   if (isEditing && editMode) {
@@ -166,6 +179,71 @@ export default function CardItem({
             className="bg-background border border-border rounded px-2 py-1 text-xs text-foreground focus:outline-none focus:border-accent"
           />
           <span className="text-[10px] text-muted">Check-in date</span>
+        </div>
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-muted">Assignees</span>
+            {editAssignees.length > 0 && (
+              <span className="text-[10px] text-accent font-medium">
+                {editAssignees.length} selected
+              </span>
+            )}
+          </div>
+          {editAssignees.length > 0 && (
+            <div className="flex items-center gap-1 flex-wrap">
+              {editAssignees.map((name) => (
+                <button
+                  key={name}
+                  type="button"
+                  onClick={() => toggleAssignee(name)}
+                  className="text-[10px] px-1.5 py-0.5 rounded-full bg-accent/15 text-accent font-medium hover:bg-red-100 hover:text-red-500 transition-colors flex items-center gap-0.5"
+                >
+                  {name.split(" ")[0]}
+                  <X size={8} />
+                </button>
+              ))}
+            </div>
+          )}
+          <div className="relative">
+            <button
+              type="button"
+              onClick={() => setAssigneeDropdownOpen(!assigneeDropdownOpen)}
+              className="w-full text-left bg-background border border-border rounded px-2 py-1 text-xs text-muted hover:border-accent focus:outline-none focus:border-accent"
+            >
+              {assigneeDropdownOpen ? "Close list" : "+ Add / remove people"}
+            </button>
+            {assigneeDropdownOpen && teamMembers.length > 0 && (
+              <div className="absolute z-10 mt-1 w-full bg-surface border border-border rounded shadow-lg max-h-40 overflow-y-auto">
+                {teamMembers.map((member) => {
+                  const selected = editAssignees.includes(member.name);
+                  return (
+                    <button
+                      key={member.id}
+                      type="button"
+                      onClick={() => toggleAssignee(member.name)}
+                      className={`w-full text-left px-2 py-1.5 text-xs flex items-center gap-2 hover:bg-accent/10 transition-colors ${
+                        selected ? "bg-accent/5" : ""
+                      }`}
+                    >
+                      <span
+                        className={`w-3.5 h-3.5 rounded border flex items-center justify-center flex-shrink-0 ${
+                          selected
+                            ? "bg-accent border-accent"
+                            : "border-border"
+                        }`}
+                      >
+                        {selected && <Check size={10} className="text-white" />}
+                      </span>
+                      <span className="truncate">{member.name}</span>
+                      <span className="text-[10px] text-muted ml-auto truncate">
+                        {member.affiliation}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </div>
         <div className="flex gap-2">
           <button

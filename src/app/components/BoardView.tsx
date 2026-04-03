@@ -119,6 +119,7 @@ function DroppableColumn({
                 card={card}
                 workstream={ws}
                 editMode={editMode}
+                teamMembers={state.team}
                 onUpdate={onUpdateCard}
                 onDelete={onDeleteCard}
               />

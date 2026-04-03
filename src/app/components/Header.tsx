@@ -8,6 +8,7 @@ import {
   Activity,
   Users,
   Calendar,
+  Info,
   Pencil,
   PencilOff,
   RotateCcw,
@@ -30,6 +31,7 @@ const NAV_ITEMS: { view: View; label: string; icon: typeof LayoutGrid }[] = [
   { view: "activity", label: "Activity", icon: Activity },
   { view: "team", label: "Team", icon: Users },
   { view: "events", label: "Events", icon: Calendar },
+  { view: "about", label: "About", icon: Info },
 ];
 
 export default function Header({

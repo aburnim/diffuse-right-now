@@ -18,8 +18,9 @@ import WorkstreamView from "./components/WorkstreamView";
 import ActivityFeed from "./components/ActivityFeed";
 import TeamView from "./components/TeamView";
 import EventsView from "./components/EventsView";
+import AboutView from "./components/AboutView";
 
-export type View = "board" | "workstream" | "activity" | "team" | "events";
+export type View = "board" | "workstream" | "activity" | "team" | "events" | "about";
 
 export default function Home() {
   const [state, setState] = useState<AppState | null>(null);
@@ -149,6 +150,7 @@ export default function Home() {
           <TeamView state={state} onSelectWorkstream={handleSelectWorkstream} />
         )}
         {view === "events" && <EventsView state={state} />}
+        {view === "about" && <AboutView />}
       </main>
     </div>
   );
