@@ -58,7 +58,7 @@ export default function Home() {
   const handleUpdateCard = useCallback(
     (
       cardId: string,
-      updates: Partial<Pick<Card, "title" | "description" | "assignees">>
+      updates: Partial<Pick<Card, "title" | "description" | "assignees" | "checkInDate">>
     ) => {
       if (!state) return;
       persist(updateCard(state, cardId, updates));

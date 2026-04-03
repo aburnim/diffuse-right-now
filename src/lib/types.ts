@@ -13,6 +13,7 @@ export interface Card {
   column: "vision" | "in-progress" | "next-up" | "complete";
   assignees: string[];
   updatedAt: string;
+  checkInDate?: string;
 }
 
 export interface Workstream {

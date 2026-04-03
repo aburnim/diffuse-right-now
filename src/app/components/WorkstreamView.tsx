@@ -12,7 +12,7 @@ interface WorkstreamViewProps {
   onMoveCard: (cardId: string, newColumn: Card["column"]) => void;
   onUpdateCard: (
     cardId: string,
-    updates: Partial<Pick<Card, "title" | "description" | "assignees">>
+    updates: Partial<Pick<Card, "title" | "description" | "assignees" | "checkInDate">>
   ) => void;
   onAddCard: (
     workstreamId: string,
@@ -114,9 +114,8 @@ export default function WorkstreamView({
           <div className="space-y-6">
             {inProgress.length > 0 && (
               <div>
-                <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
-                  <span className="w-2 h-2 rounded-full bg-blue-500" />
-                  In Progress ({inProgress.length})
+                <h3 className="text-xs font-bold uppercase tracking-widest text-blue-500 bg-blue-500/10 rounded-lg px-3 py-2 mb-3">
+                  IN PROGRESS ({inProgress.length})
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {inProgress.map((card) => (
@@ -135,9 +134,8 @@ export default function WorkstreamView({
 
             {nextUp.length > 0 && (
               <div>
-                <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
-                  <span className="w-2 h-2 rounded-full bg-amber-500" />
-                  Next Up ({nextUp.length})
+                <h3 className="text-xs font-bold uppercase tracking-widest text-amber-500 bg-amber-500/10 rounded-lg px-3 py-2 mb-3">
+                  NEXT UP ({nextUp.length})
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {nextUp.map((card) => (
@@ -156,9 +154,8 @@ export default function WorkstreamView({
 
             {complete.length > 0 && (
               <div>
-                <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                  Complete ({complete.length})
+                <h3 className="text-xs font-bold uppercase tracking-widest text-emerald-500 bg-emerald-500/10 rounded-lg px-3 py-2 mb-3">
+                  COMPLETE ({complete.length})
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {complete.map((card) => (

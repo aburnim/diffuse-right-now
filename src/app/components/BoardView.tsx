@@ -27,7 +27,7 @@ interface BoardViewProps {
   onMoveCard: (cardId: string, newColumn: Card["column"]) => void;
   onUpdateCard: (
     cardId: string,
-    updates: Partial<Pick<Card, "title" | "description" | "assignees">>
+    updates: Partial<Pick<Card, "title" | "description" | "assignees" | "checkInDate">>
   ) => void;
   onAddCard: (
     workstreamId: string,
@@ -87,13 +87,22 @@ function DroppableColumn({
         isOver ? "bg-accent/5" : ""
       }`}
     >
-      <div className="flex items-center gap-2 px-3 py-2 mb-2">
+      <div
+        className="flex items-center gap-2 px-3 py-2 mb-2 rounded-lg"
+        style={{ backgroundColor: accent + "15" }}
+      >
+        <h2
+          className="text-xs font-bold uppercase tracking-widest"
+          style={{ color: accent }}
+        >
+          {label}
+        </h2>
         <span
-          className="w-2.5 h-2.5 rounded-full"
-          style={{ backgroundColor: accent }}
-        />
-        <h2 className="text-sm font-semibold text-foreground">{label}</h2>
-        <span className="text-xs text-muted ml-auto">{cards.length}</span>
+          className="text-xs font-semibold ml-auto"
+          style={{ color: accent }}
+        >
+          {cards.length}
+        </span>
       </div>
 
       <SortableContext
@@ -187,6 +196,18 @@ export default function BoardView({
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
   );
 
+  // Sort: cards with nearest check-in date first, then by staleness (oldest updated first)
+  const sortCards = (cards: Card[]) =>
+    [...cards].sort((a, b) => {
+      // Cards with check-in dates come first, sorted by nearest date
+      if (a.checkInDate && b.checkInDate)
+        return new Date(a.checkInDate).getTime() - new Date(b.checkInDate).getTime();
+      if (a.checkInDate) return -1;
+      if (b.checkInDate) return 1;
+      // Then sort by oldest updated first (stalest rises)
+      return new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime();
+    });
+
   const filteredCards = filterWorkstream
     ? state.cards.filter((c) => c.workstreamId === filterWorkstream)
     : state.cards;
@@ -223,7 +244,7 @@ export default function BoardView({
             id={col.id}
             label={col.label}
             accent={col.accent}
-            cards={filteredCards.filter((c) => c.column === col.id)}
+            cards={sortCards(filteredCards.filter((c) => c.column === col.id))}
             workstreams={state.workstreams}
             editMode={editMode}
             onUpdateCard={onUpdateCard}

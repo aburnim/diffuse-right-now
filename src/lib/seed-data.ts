@@ -171,6 +171,7 @@ export const seedData: AppState = {
       column: "in-progress",
       assignees: [],
       updatedAt: "2026-04-01",
+      checkInDate: "2026-05-01",
     },
     {
       id: "sw-5",
@@ -300,6 +301,7 @@ export const seedData: AppState = {
       column: "next-up",
       assignees: [],
       updatedAt: "2026-04-01",
+      checkInDate: "2026-05-01",
     },
     {
       id: "infra-6",
@@ -350,6 +352,7 @@ export const seedData: AppState = {
       column: "in-progress",
       assignees: [],
       updatedAt: "2026-04-01",
+      checkInDate: "2026-04-15",
     },
     {
       id: "hire-2",
@@ -391,6 +394,7 @@ export const seedData: AppState = {
       column: "next-up",
       assignees: [],
       updatedAt: "2026-04-01",
+      checkInDate: "2026-05-01",
     },
     {
       id: "stacks-4",

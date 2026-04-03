@@ -105,7 +105,7 @@ export function moveCard(
 export function updateCard(
   state: AppState,
   cardId: string,
-  updates: Partial<Pick<Card, "title" | "description" | "assignees">>
+  updates: Partial<Pick<Card, "title" | "description" | "assignees" | "checkInDate">>
 ): AppState {
   const card = state.cards.find((c) => c.id === cardId);
   if (!card) return state;
@@ -119,6 +119,8 @@ export function updateCard(
     changes.push(
       `assignees to ${updates.assignees.join(", ") || "none"}`
     );
+  if (updates.checkInDate !== undefined)
+    changes.push(`check-in date to ${updates.checkInDate || "none"}`);
 
   const updated = {
     ...state,

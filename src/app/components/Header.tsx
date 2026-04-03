@@ -43,7 +43,7 @@ export default function Header({
   onFilterWorkstream,
 }: HeaderProps) {
   return (
-    <header className="border-b border-border bg-surface sticky top-0 z-50">
+    <header className="border-b-2 border-border bg-surface sticky top-0 z-50 shadow-sm">
       <div className="flex items-center justify-between px-4 py-3">
         <div className="flex items-center gap-3">
           <h1 className="text-lg font-bold text-accent tracking-tight">
