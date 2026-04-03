@@ -49,9 +49,14 @@ export default function Header({
           <h1 className="text-lg font-bold text-accent tracking-tight">
             DiffUSE Right Now
           </h1>
-          <span className="text-xs text-muted hidden sm:inline">
-            Astera Institute
-          </span>
+          <a
+            href="https://radial.org"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-muted hidden sm:inline hover:text-accent transition-colors"
+          >
+            Astera Institute / Radial
+          </a>
         </div>
 
         <nav className="flex items-center gap-1">

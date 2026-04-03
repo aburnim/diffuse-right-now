@@ -4,7 +4,7 @@ export const seedData: AppState = {
   workstreams: [
     {
       id: "mdx2",
-      name: "Data Collection / Mdx2",
+      name: "Data Collection and Processing",
       color: "#F39C12",
       vision:
         "DiffUSE's \"front door\": raw crystal data in, clean datasets out. mdx2 automates diffuse scattering extraction from beamlines. Goal: any synchrotron user can process diffuse data, not just experts. Expanding beyond lysozyme to real biological questions.",
@@ -59,7 +59,7 @@ export const seedData: AppState = {
     },
     {
       id: "hiring",
-      name: "Hiring",
+      name: "Operations",
       color: "#95A5A6",
       vision:
         "Fill critical science gaps: ML modeling, validation, biology. ML modeler for Sampleworks/Water; postdoc for data collection. All roles require PhD + bio background + open science alignment.",
