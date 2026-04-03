@@ -188,6 +188,58 @@ export function deleteCard(state: AppState, cardId: string): AppState {
   );
 }
 
+export function reorderCard(
+  state: AppState,
+  cardId: string,
+  targetCardId: string
+): AppState {
+  const card = state.cards.find((c) => c.id === cardId);
+  const targetCard = state.cards.find((c) => c.id === targetCardId);
+  if (!card || !targetCard || card.id === targetCard.id) return state;
+
+  // Get all cards in the target column, sorted the same way the board displays them
+  const columnCards = state.cards
+    .filter((c) => c.column === targetCard.column)
+    .sort((a, b) => {
+      if (a.sortOrder != null && b.sortOrder != null) return a.sortOrder - b.sortOrder;
+      if (a.sortOrder != null) return -1;
+      if (b.sortOrder != null) return 1;
+      if (a.checkInDate && b.checkInDate)
+        return new Date(a.checkInDate).getTime() - new Date(b.checkInDate).getTime();
+      if (a.checkInDate) return -1;
+      if (b.checkInDate) return 1;
+      return new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime();
+    });
+
+  // Remove the dragged card from the list if it was in this column
+  const withoutDragged = columnCards.filter((c) => c.id !== cardId);
+
+  // Insert the dragged card at the target position
+  const targetIndex = withoutDragged.findIndex((c) => c.id === targetCardId);
+  withoutDragged.splice(targetIndex, 0, card);
+
+  // Assign sortOrder to every card in the column
+  const orderMap = new Map<string, number>();
+  withoutDragged.forEach((c, i) => orderMap.set(c.id, i));
+
+  const updated = {
+    ...state,
+    cards: state.cards.map((c) => {
+      if (orderMap.has(c.id)) {
+        return { ...c, sortOrder: orderMap.get(c.id)!, column: targetCard.column };
+      }
+      return c;
+    }),
+  };
+
+  return addActivity(
+    updated,
+    `Reordered "${card.title}" in ${targetCard.column}`,
+    cardId,
+    card.workstreamId
+  );
+}
+
 export function resetState(): AppState {
   if (typeof window !== "undefined") {
     localStorage.removeItem(STATE_KEY);

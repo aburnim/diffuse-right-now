@@ -14,6 +14,7 @@ export interface Card {
   assignees: string[];
   updatedAt: string;
   checkInDate?: string;
+  sortOrder?: number;
 }
 
 export interface Workstream {

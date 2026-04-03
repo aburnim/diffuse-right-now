@@ -25,6 +25,7 @@ interface BoardViewProps {
   editMode: boolean;
   filterWorkstream: string | null;
   onMoveCard: (cardId: string, newColumn: Card["column"]) => void;
+  onReorderCard: (cardId: string, targetCardId: string) => void;
   onUpdateCard: (
     cardId: string,
     updates: Partial<Pick<Card, "title" | "description" | "assignees" | "checkInDate">>
@@ -187,6 +188,7 @@ export default function BoardView({
   editMode,
   filterWorkstream,
   onMoveCard,
+  onReorderCard,
   onUpdateCard,
   onAddCard,
   onDeleteCard,
@@ -197,9 +199,13 @@ export default function BoardView({
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
   );
 
-  // Sort: cards with nearest check-in date first, then by staleness (oldest updated first)
+  // Sort: manually ordered cards first (by sortOrder), then auto-sort the rest
   const sortCards = (cards: Card[]) =>
     [...cards].sort((a, b) => {
+      // Cards with explicit sortOrder come first
+      if (a.sortOrder != null && b.sortOrder != null) return a.sortOrder - b.sortOrder;
+      if (a.sortOrder != null) return -1;
+      if (b.sortOrder != null) return 1;
       // Cards with check-in dates come first, sorted by nearest date
       if (a.checkInDate && b.checkInDate)
         return new Date(a.checkInDate).getTime() - new Date(b.checkInDate).getTime();
@@ -224,10 +230,25 @@ export default function BoardView({
     if (!over) return;
 
     const cardId = active.id as string;
-    const overColumn = over.id as Card["column"];
+    const overId = over.id as string;
 
-    if (COLUMNS.some((c) => c.id === overColumn)) {
-      onMoveCard(cardId, overColumn);
+    // Dropped directly on a column
+    if (COLUMNS.some((c) => c.id === overId)) {
+      onMoveCard(cardId, overId as Card["column"]);
+      return;
+    }
+
+    // Dropped on another card
+    const draggedCard = state.cards.find((c) => c.id === cardId);
+    const targetCard = state.cards.find((c) => c.id === overId);
+    if (!targetCard || !draggedCard) return;
+
+    if (draggedCard.column === targetCard.column) {
+      // Same column — reorder
+      onReorderCard(cardId, overId);
+    } else {
+      // Different column — move then reorder to target position
+      onMoveCard(cardId, targetCard.column);
     }
   };
 

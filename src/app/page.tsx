@@ -7,6 +7,7 @@ import {
   loadStateFromServer,
   saveState,
   moveCard,
+  reorderCard,
   updateCard,
   addCard,
   deleteCard,
@@ -83,6 +84,14 @@ export default function Home() {
     [state, persist]
   );
 
+  const handleReorderCard = useCallback(
+    (cardId: string, targetCardId: string) => {
+      if (!state) return;
+      persist(reorderCard(state, cardId, targetCardId));
+    },
+    [state, persist]
+  );
+
   const handleUpdateCard = useCallback(
     (
       cardId: string,
@@ -154,6 +163,7 @@ export default function Home() {
             editMode={editMode}
             filterWorkstream={filterWorkstream}
             onMoveCard={handleMoveCard}
+            onReorderCard={handleReorderCard}
             onUpdateCard={handleUpdateCard}
             onAddCard={handleAddCard}
             onDeleteCard={handleDeleteCard}
