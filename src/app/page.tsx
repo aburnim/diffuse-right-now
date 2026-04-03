@@ -22,6 +22,14 @@ import AboutView from "./components/AboutView";
 
 export type View = "board" | "workstream" | "activity" | "team" | "events" | "about";
 
+const VALID_VIEWS: View[] = ["board", "workstream", "activity", "team", "events", "about"];
+
+function getViewFromHash(): View {
+  if (typeof window === "undefined") return "board";
+  const hash = window.location.hash.replace("#", "");
+  return VALID_VIEWS.includes(hash as View) ? (hash as View) : "board";
+}
+
 export default function Home() {
   const [state, setState] = useState<AppState | null>(null);
   const [view, setView] = useState<View>("board");
@@ -30,6 +38,25 @@ export default function Home() {
   );
   const [editMode, setEditMode] = useState(false);
   const [filterWorkstream, setFilterWorkstream] = useState<string | null>(null);
+
+  // Set initial view from URL hash
+  useEffect(() => {
+    setView(getViewFromHash());
+  }, []);
+
+  // Sync hash to URL when view changes
+  const handleViewChange = useCallback((newView: View) => {
+    setView(newView);
+    const newHash = newView === "board" ? window.location.pathname : `#${newView}`;
+    window.history.pushState(null, "", newHash);
+  }, []);
+
+  // Handle browser back/forward
+  useEffect(() => {
+    const onHashChange = () => setView(getViewFromHash());
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
 
   useEffect(() => {
     // Try KV first (production), fall back to localStorage
@@ -97,8 +124,8 @@ export default function Home() {
 
   const handleSelectWorkstream = useCallback((wsId: string) => {
     setSelectedWorkstream(wsId);
-    setView("workstream");
-  }, []);
+    handleViewChange("workstream");
+  }, [handleViewChange]);
 
   if (!state) {
     return (
@@ -112,7 +139,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen">
       <Header
         view={view}
-        onViewChange={setView}
+        onViewChange={handleViewChange}
         editMode={editMode}
         onToggleEdit={() => setEditMode(!editMode)}
         onReset={handleReset}
